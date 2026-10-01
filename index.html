@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Веры 💘</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: 'Segoe UI', 'Georgia', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff9ec7;
+    transition: background 0.65s ease;
+    position: relative;
+    --glow: #ff4f9a;
+  }
+
+  .floaty {
+    position: fixed;
+    pointer-events: none;
+    opacity: 0.5;
+    animation: floatUp linear infinite;
+    z-index: 0;
+    user-select: none;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .bg-spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.7s ease, box-shadow 0.7s ease;
+    animation: bgSparkPulse ease-in-out infinite;
+  }
+  @keyframes bgSparkPulse {
+    0%, 100% { opacity: 0.25; transform: scale(1); }
+    50%      { opacity: 0.95; transform: scale(1.7); }
+  }
+
+  .book-scene { perspective: 2400px; z-index: 5; position: relative; }
+
+  .book {
+    width: 500px;
+    height: 720px;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .sheet {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px 22px 22px 16px;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 2s cubic-bezier(0.45, 0.05, 0.2, 1),
+                box-shadow 0.6s ease;
+    backface-visibility: hidden;
+    padding: 42px 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.55);
+    box-shadow:
+      0 0 18px rgba(255,255,255,0.5),
+      0 0 45px var(--sheet-glow, rgba(255,100,160,0.55)),
+      0 0 90px var(--sheet-glow, rgba(255,100,160,0.35)),
+      inset 0 0 30px rgba(255,255,255,0.25);
+  }
+
+  .sheet.flipped { transform: rotateY(-180deg); }
+
+  .sheet::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 26px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.15), transparent);
+    pointer-events: none;
+    border-radius: 16px 0 0 16px;
+  }
+  .sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 25%, rgba(255,255,255,0.8) 1.5px, transparent 2px),
+      radial-gradient(circle at 75% 35%, rgba(255,255,255,0.6) 2px, transparent 3px),
+      radial-gradient(circle at 40% 75%, rgba(255,255,255,0.55) 1.5px, transparent 2px),
+      radial-gradient(circle at 88% 82%, rgba(255,255,255,0.7) 1.5px, transparent 2px);
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  .sheet > * { position: relative; z-index: 1; }
+
+  .cover {
+    background: linear-gradient(160deg, #ff4f9a 0%, #ff7eb3 50%, #ff4f9a 100%);
+    color: #fff;
+    z-index: 20;
+    --sheet-glow: rgba(255,79,154,0.75);
+    padding: 32px 26px;
+  }
+  .cover-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 16px;
+  }
+  .cover-top {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    text-align: left;
+  }
+  .cover-photo-square {
+    width: 118px;
+    height: 118px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.95);
+    box-shadow: 0 0 20px rgba(255,255,255,0.75), 0 0 45px rgba(255,255,255,0.5);
+    flex-shrink: 0;
+  }
+  .cover-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+  }
+  .cover-line-name {
+    font-size: 1.45rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 16px rgba(255,255,255,0.9), 0 3px 12px rgba(120,0,60,0.5);
+    line-height: 1.15;
+  }
+  .cover-line {
+    font-size: 0.92rem;
+    opacity: 0.95;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+  .cover-line-italic {
+    font-style: italic;
+    opacity: 0.9;
+    font-size: 0.88rem;
+  }
+  .cover-divider {
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+    margin: 8px 0;
+    border-radius: 2px;
+  }
+  .cover-heart {
+    font-size: 4rem;
+    animation: coverHeart 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(255,255,255,0.95));
+    margin: 4px 0;
+  }
+  @keyframes coverHeart {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50%      { transform: scale(1.15) rotate(3deg); }
+  }
+  .cover-main-text {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    opacity: 0.97;
+    padding: 0 6px;
+    text-shadow: 0 2px 8px rgba(120,0,60,0.4);
+  }
+  .cover-hint {
+    position: absolute;
+    bottom: 22px;
+    font-size: 0.88rem;
+    animation: hintPulse 2s ease-in-out infinite;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1; }
+  }
+
+  .page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .page-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-shadow: 0 0 18px rgba(255,255,255,0.8);
+  }
+  .page-text {
+    font-size: 1.18rem;
+    line-height: 1.7;
+    font-weight: 500;
+    padding: 0 6px;
+  }
+  .page-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 0 25px rgba(255,255,255,0.9), 0 0 60px var(--sheet-glow);
+    margin-bottom: 6px;
+    animation: photoPulse 3s ease-in-out infinite;
+  }
+  @keyframes photoPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+  }
+  .page-emoji {
+    font-size: 3.8rem;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px var(--sheet-glow));
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+  }
+
+  .next-btn {
+    border: 2px solid rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 16px 42px;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--btn-c1, #ff7eb3), var(--btn-c2, #ff4f9a));
+    box-shadow:
+      0 0 20px var(--btn-glow, rgba(255,79,154,0.9)),
+      0 0 40px var(--btn-glow, rgba(255,79,154,0.6)),
+      inset 0 0 15px rgba(255,255,255,0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    margin-top: 18px;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+  .next-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+      0 0 30px var(--btn-glow, rgba(255,79,154,1)),
+      0 0 60px var(--btn-glow, rgba(255,79,154,0.8)),
+      0 0 100px var(--btn-glow, rgba(255,79,154,0.5)),
+      inset 0 0 20px rgba(255,255,255,0.5);
+  }
+  .next-btn:active {
+    transform: translateY(-1px) scale(0.98);
+    filter: blur(0.5px) brightness(1.15);
+  }
+
+  .q-progress {
+    position: absolute;
+    top: 16px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    opacity: 0.85;
+  }
+
+  .back-cover {
+    background: linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 60%, #ffb8d9 100%);
+    color: #8a1f52;
+    --sheet-glow: rgba(255,79,154,0.6);
+    text-align: center;
+    padding: 40px 30px;
+  }
+  .back-cover .big-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.55;
+    margin-bottom: 22px;
+    text-shadow: 0 0 18px rgba(255,255,255,0.9);
+  }
+  .back-cover .emoji-gift {
+    font-size: 3.6rem;
+    margin-bottom: 14px;
+    animation: giftShake 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,79,154,0.7));
+  }
+  @keyframes giftShake {
+    0%, 100% { transform: rotate(-7deg); }
+    50%      { transform: rotate(7deg) scale(1.12); }
+  }
+  .gift-btn {
+    border: 2px solid #fff;
+    cursor: pointer;
+    padding: 18px 44px;
+    border-radius: 44px;
+    font-size: 1.18rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow:
+      0 0 25px rgba(255,79,154,0.9),
+      0 0 55px rgba(255,79,154,0.6),
+      inset 0 0 18px rgba(255,255,255,0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    font-family: inherit;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(120,0,60,0.4);
+  }
+  .gift-btn:hover {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow:
+      0 0 35px rgba(255,79,154,1),
+      0 0 75px rgba(255,79,154,0.8),
+      inset 0 0 25px rgba(255,255,255,0.5);
+  }
+  .gift-btn:active { filter: blur(0.5px) brightness(1.15); }
+
+  .admin-link {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: #fff;
+    opacity: 0.55;
+    cursor: pointer;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    user-select: none;
+    transition: opacity 0.3s ease;
+    font-weight: 600;
+    padding: 6px 14px;
+    text-shadow: 0 0 10px rgba(255,79,154,1), 0 1px 4px rgba(120,0,60,0.6);
+    display: none;
+  }
+  .admin-link:hover { opacity: 1; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 5, 40, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    animation: fadeIn 0.45s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(16px);
+    padding: 36px 28px;
+    border-radius: 24px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow:
+      0 0 30px var(--modal-glow, rgba(255,79,154,0.7)),
+      0 0 70px var(--modal-glow, rgba(255,79,154,0.4)),
+      0 20px 60px rgba(120,20,80,0.3);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .modal-emoji { font-size: 2.8rem; margin-bottom: 14px; }
+  .modal-text {
+    font-size: 1.18rem;
+    color: #8a1f52;
+    font-weight: 700;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .modal-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+  .btn {
+    border: 2px solid rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 32px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow: 0 0 20px rgba(255,79,154,0.85), 0 0 45px rgba(255,79,154,0.55);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    min-width: 120px;
+  }
+  .btn:hover { transform: translateY(-3px) scale(1.04); }
+  .btn:active { filter: blur(0.5px) brightness(1.15); }
+  .btn-no { background: linear-gradient(135deg, #c9a0dc, #a875c9); box-shadow: 0 0 20px rgba(168,117,201,0.85), 0 0 45px rgba(168,117,201,0.55); }
+  .btn-full { width: 100%; }
+
+  .q-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 22px;
+    line-height: 1.45;
+    text-shadow: 0 0 18px rgba(255,255,255,0.8);
+  }
+  .q-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .q-btn {
+    border: 2px solid rgba(255,255,255,0.75);
+    cursor: pointer;
+    padding: 16px 40px;
+    border-radius: 34px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    min-width: 130px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+  .q-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.05); }
+  .q-btn:active:not(:disabled) { filter: blur(0.5px) brightness(1.15); }
+  .q-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .q-feedback { font-size: 1.05rem; margin-top: 18px; min-height: 26px; font-weight: 800; }
+  .q-ok { color: #0f8a4a; }
+  .q-bad { color: #c22069; }
+  .q-attempts { font-size: 0.92rem; margin-top: 12px; color: #8a3a60; font-weight: 700; }
+  .q-progress-top {
+    position: absolute;
+    top: 14px; left: 0; right: 0;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    opacity: 0.85;
+  }
+
+  .timer {
+    font-size: 2.6rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin: 18px 0;
+    text-shadow: 0 0 25px currentColor;
+  }
+
+  .flying-word {
+    position: fixed;
+    pointer-events: none;
+    z-index: 900;
+    font-weight: 900;
+    white-space: nowrap;
+    animation: flyDown linear forwards;
+    text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+    letter-spacing: 0.5px;
+  }
+  @keyframes flyDown {
+    0%   { transform: translateY(-80px) scale(0.5) rotate(var(--rot)); opacity: 0; }
+    12%  { opacity: 1; transform: translateY(20px) scale(1.1) rotate(var(--rot)); }
+    88%  { opacity: 1; }
+    100% { transform: translateY(108vh) scale(0.9) rotate(var(--rot)); opacity: 0; }
+  }
+
+  .spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  @keyframes sparkFly {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    70%  { opacity: 0.85; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  .final-card {
+    max-width: 460px;
+    width: 100%;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 26px 22px 30px;
+    text-align: left;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 30px rgba(255,79,154,0.7), 0 0 70px rgba(255,79,154,0.4), 0 20px 60px rgba(120,20,80,0.3);
+    position: relative;
+  }
+  .final-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .final-photo {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 15px rgba(255,79,154,0.7), 0 0 35px rgba(255,79,154,0.4);
+    flex-shrink: 0;
+  }
+  .final-info { text-align: left; }
+  .final-name {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #8a1f52;
+    margin-bottom: 4px;
+  }
+  .final-line {
+    font-size: 0.95rem;
+    color: #5e1c3e;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .final-reward {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #8a1f52;
+    background: linear-gradient(135deg, #fff0f7, #ffd1e6);
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 2px dashed #ff4f9a;
+    margin: 14px 0;
+    cursor: pointer;
+    user-select: all;
+    word-break: break-word;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255,79,154,0.35);
+  }
+  .final-btn {
+    width: 100%;
+    border: 2px solid rgba(255,255,255,0.8);
+    cursor: pointer;
+    padding: 16px;
+    border-radius: 32px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow: 0 0 22px rgba(255,79,154,0.9), 0 0 50px rgba(255,79,154,0.55), inset 0 0 15px rgba(255,255,255,0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(120,0,60,0.4);
+  }
+  .final-btn:hover { transform: translateY(-3px) scale(1.02); }
+  .final-btn:active { filter: blur(0.5px) brightness(1.15); }
+  .final-copied {
+    font-size: 0.9rem;
+    color: #0f8a4a;
+    font-weight: 800;
+    min-height: 22px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .final-signature {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #a85578;
+    margin-top: 14px;
+    font-weight: 600;
+  }
+
+  .admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,5,20,0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .admin-panel {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .admin-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .admin-header h2 { font-size: 1.1rem; font-weight: 800; }
+  .admin-close {
+    background: rgba(255,255,255,0.25);
+    border: none;
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: inherit;
+  }
+  .admin-body { padding: 22px 24px; overflow-y: auto; flex: 1; }
+  .admin-login-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #ffd1e6;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    text-align: center;
+    letter-spacing: 5px;
+    font-weight: 800;
+    color: #8a1f52;
+    outline: none;
+    margin-bottom: 12px;
+    font-family: inherit;
+  }
+  .admin-login-input:focus { border-color: #ff4f9a; }
+  .admin-login-error {
+    color: #c22069;
+    font-size: 0.95rem;
+    font-weight: 800;
+    min-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: #fff0f7;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ffd1e6;
+  }
+  .stat-value { font-size: 1.5rem; font-weight: 800; color: #c22069; }
+  .stat-label {
+    font-size: 0.7rem;
+    color: #8a3a60;
+    margin-top: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .admin-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .admin-action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ffd1e6;
+    background: #fff;
+    color: #8a1f52;
+    font-weight: 800;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .admin-action-btn:hover { background: #fff0f7; border-color: #ff7eb3; }
+  .admin-action-btn.danger { color: #c22069; }
+  .log-list { display: flex; flex-direction: column; gap: 8px; }
+  .log-item {
+    background: #fff8fb;
+    border-left: 3px solid #ff7eb3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #5e1c3e;
+    line-height: 1.5;
+  }
+  .log-time { color: #a85578; font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; }
+  .log-event { font-weight: 800; color: #8a1f52; }
+  .log-detail { color: #7a294f; }
+  .log-empty { text-align: center; color: #a85578; font-style: italic; padding: 30px 10px; }
+  .log-type-visit { border-left-color: #6ec6ff; }
+  .log-type-page { border-left-color: #ffd76e; }
+  .log-type-answer { border-left-color: #7ee8a2; }
+  .log-type-error { border-left-color: #ff7b7b; }
+  .log-type-reward { border-left-color: #c48cff; }
+  .log-type-cooldown { border-left-color: #ff5fa2; }
+
+  @media (max-width: 560px) {
+    .book { width: 90vw; height: 78vh; max-height: 680px; }
+    .page-title { font-size: 1.55rem; }
+    .page-text { font-size: 1.02rem; }
+    .cover-line-name { font-size: 1.15rem; }
+    .page-photo { width: 150px; height: 150px; }
+    .cover-photo-square { width: 90px; height: 90px; }
+    .next-btn { padding: 14px 34px; font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="book-scene">
+  <div class="book" id="book"></div>
+</div>
+
+<div class="admin-link" id="adminLink">А тут секретик</div>
+
+<script>
+/* ==========================================================
+   НАСТРОЙКИ
+   ========================================================== */
+const MAX_ATTEMPTS = 3;
+const COOLDOWN_SEC = 120;
+const ADMIN_PASSWORD = "11122";
+
+const PHOTO_1 = "https://i.ibb.co/ZzkjrDHF/IMG-20260929-163559-724.jpg";
+const PHOTO_2 = "https://i.ibb.co/PZ4q2xg7/IMG-20260929-163557-601.jpg";
+const PHOTO_3 = "https://i.ibb.co/Vp9qwCyV/IMG-20261001-124227-966.jpg";
+
+const coverStyle = {
+  coverBg: "linear-gradient(160deg, #ff7eb3 0%, #ffb0d1 50%, #ff5fa2 100%)",
+  pageBg: "linear-gradient(135deg, #ffb0d1 0%, #ffd6e8 50%, #ff9ec7 100%)",
+  color: "#ff4f9a"
+};
+
+const bookPages = [
+  { pageBg: "linear-gradient(135deg, #ff9ec7 0%, #ffd6e8 50%, #ffb8d9 100%)", sheetBg: "linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%)", color: "#ff4f9a", colorDark: "#c22069", photo: PHOTO_1, title: "Приветик 💘", text: "Эта маленькая книжка сделана специально для тебя 💌" },
+  { pageBg: "linear-gradient(135deg, #ffd76e 0%, #fff0c9 50%, #ffc94d 100%)", sheetBg: "linear-gradient(160deg, #fff6d6 0%, #ffe8a8 100%)", color: "#f0b800", colorDark: "#b88300", photo: PHOTO_2, title: "Солнышко ☀️", text: "Ты очень добрая и светлая. С тобой рядом становится теплее, даже если просто переписываться." },
+  { pageBg: "linear-gradient(135deg, #6ec6ff 0%, #c9e6ff 50%, #8ed0ff 100%)", sheetBg: "linear-gradient(160deg, #e4f2ff 0%, #c2dcff 100%)", color: "#2b8fe0", colorDark: "#1a5c94", photo: PHOTO_3, title: "Ты — звёздочка ✨", text: "У тебя красивая улыбка и доброе сердце. Не забывай об этом никогда, ладно?" },
+  { pageBg: "linear-gradient(135deg, #7ee8a2 0%, #d6ffe0 50%, #a8f0c0 100%)", sheetBg: "linear-gradient(160deg, #e4fff0 0%, #c2f0d6 100%)", color: "#1f9e5a", colorDark: "#0f6b3a", photo: null, emoji: "🌿", title: "Просто так", text: "С тобой очень здорово и весело проводить время" },
+  { pageBg: "linear-gradient(135deg, #c48cff 0%, #f0d6ff 50%, #d9a8ff 100%)", sheetBg: "linear-gradient(160deg, #f4e4ff 0%, #e0c2ff 100%)", color: "#8b3fd9", colorDark: "#5f2a94", photo: null, emoji: "🌸", title: "Мне с тобой хорошо", text: "Гулять с тобой и веселиться — это лучшее время!<br><br>Пусть каждый день приносит тебе радость и улыбки 💜" }
+];
+
+const questions = [
+  { q: "Ты очень красивая, это правда?", a: ["Да", "Нет"], correct: 0 },
+  { q: "У тебя самая милая улыбка на свете?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты умная и сообразительная?", a: ["Да", "Нет"], correct: 0 },
+  { q: "С тобой интересно разговаривать?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты заслуживаешь только хорошего?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты умеешь делать мир вокруг добрее?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты классная, даже когда грустишь?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты — настоящая, и это здорово?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Тебе можно доверять секретики?", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты просто чудо, согласна?", a: ["Да", "Нет"], correct: 0 }
+];
+
+const questionStyles = [
+  { pageBg: "linear-gradient(135deg, #ff9ec7 0%, #ffd6e8 50%, #ffb8d9 100%)", sheetBg: "linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%)", color: "#ff4f9a", colorDark: "#c22069" },
+  { pageBg: "linear-gradient(135deg, #ffd76e 0%, #fff0c9 50%, #ffc94d 100%)", sheetBg: "linear-gradient(160deg, #fff6d6 0%, #ffe8a8 100%)", color: "#f0b800", colorDark: "#b88300" },
+  { pageBg: "linear-gradient(135deg, #7ee8a2 0%, #d6ffe0 50%, #a8f0c0 100%)", sheetBg: "linear-gradient(160deg, #e4fff0 0%, #c2f0d6 100%)", color: "#1f9e5a", colorDark: "#0f6b3a" },
+  { pageBg: "linear-gradient(135deg, #6ec6ff 0%, #c9e6ff 50%, #8ed0ff 100%)", sheetBg: "linear-gradient(160deg, #e4f2ff 0%, #c2dcff 100%)", color: "#2b8fe0", colorDark: "#1a5c94" },
+  { pageBg: "linear-gradient(135deg, #ff7b7b 0%, #ffd6d6 50%, #ff9e9e 100%)", sheetBg: "linear-gradient(160deg, #ffe4e4 0%, #ffc2c2 100%)", color: "#d92b2b", colorDark: "#8f1a1a" },
+  { pageBg: "linear-gradient(135deg, #c48cff 0%, #f0d6ff 50%, #d9a8ff 100%)", sheetBg: "linear-gradient(160deg, #f4e4ff 0%, #e0c2ff 100%)", color: "#8b3fd9", colorDark: "#5f2a94" },
+  { pageBg: "linear-gradient(135deg, #ff5fa2 0%, #ffc2dd 50%, #ff8ec0 100%)", sheetBg: "linear-gradient(160deg, #ffe0ee 0%, #ffb8d9 100%)", color: "#c22069", colorDark: "#8a1f52" },
+  { pageBg: "linear-gradient(135deg, #6ee8c8 0%, #d6fff4 50%, #a8f0e0 100%)", sheetBg: "linear-gradient(160deg, #e4fff8 0%, #c2f0e4 100%)", color: "#0f9e88", colorDark: "#0a6b5c" },
+  { pageBg: "linear-gradient(135deg, #ffb56e 0%, #ffe8c9 50%, #ffd08e 100%)", sheetBg: "linear-gradient(160deg, #fff0d6 0%, #ffdca8 100%)", color: "#d97a1f", colorDark: "#9a5414" },
+  { pageBg: "linear-gradient(135deg, #ff7eb3 0%, #ffe4f0 50%, #ffa8cd 100%)", sheetBg: "linear-gradient(160deg, #ffe4ee 0%, #ffc2dd 100%)", color: "#e84a8a", colorDark: "#a02b5c" }
+];
+
+const REWARD_WORD = "ВЕРА — САМОЕ ЛУЧШЕЕ ЧУДО 💖";
+
+const FLYING_WORDS = [
+  "Ты чудо 💖", "Вера, ты лучшая 🌸", "Не грусти ✨", "Ты красивая 💕",
+  "Ты умница 🩷", "Улыбнись 😊", "Всё получится 🌷", "Ты солнышко ☀️",
+  "Ты особенная 💗", "С тобой тепло 🎀", "Ты классная 💫", "Вера — умничка 🌟",
+  "Ты милая 🍓", "Всё будет хорошо 💝", "Ты заслуживаешь счастья 💐", "Ты самая добрая 🌺",
+  "Ты лучшая 💖", "С тобой весело 😊", "Ты сокровище 💎", "Будь счастлива 🌟"
+];
+
+/* ==========================================================
+   ЛОГИ + СОСТОЯНИЕ
+   ========================================================== */
+const LOG_KEY = "vera_site_logs";
+const VISIT_KEY = "vera_visit_id";
+const STATE_KEY = "vera_book_state_v4";
+const COOLDOWN_KEY = "vera_cooldown_until";
+
+function loadLogs() {
+  try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; }
+  catch (e) { return []; }
+}
+function saveLogs(logs) {
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(logs)); } catch (e) {}
+}
+function addLog(type, event, detail) {
+  const logs = loadLogs();
+  logs.push({ time: new Date().toISOString(), type, event, detail: detail || "", visitor: getVisitorId() });
+  if (logs.length > 500) logs.splice(0, logs.length - 500);
+  saveLogs(logs);
+}
+function getVisitorId() {
+  let id = localStorage.getItem(VISIT_KEY);
+  if (!id) {
+    id = "visitor_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem(VISIT_KEY, id);
+  }
+  return id;
+}
+
+function saveState() {
+  const state = { sheetIndex, overlay, currentQuestion, attemptsLeft };
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+  if (lockedUntil > Date.now()) localStorage.setItem(COOLDOWN_KEY, String(lockedUntil));
+  else localStorage.removeItem(COOLDOWN_KEY);
+}
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STATE_KEY)); } catch (e) { return null; }
+}
+function loadPersistedCooldown() {
+  const saved = localStorage.getItem(COOLDOWN_KEY);
+  if (!saved) return 0;
+  const ts = parseInt(saved, 10);
+  return isNaN(ts) ? 0 : ts;
+}
+function clearState() {
+  try { localStorage.removeItem(STATE_KEY); localStorage.removeItem(COOLDOWN_KEY); } catch (e) {}
+}
+
+/* ==========================================================
+   СОСТОЯНИЕ
+   ========================================================== */
+const body = document.body;
+const bookEl = document.getElementById("book");
+const adminLink = document.getElementById("adminLink");
+
+let sheetIndex = -1;
+let overlay = "none";
+let currentQuestion = 0;
+let attemptsLeft = MAX_ATTEMPTS;
+let lockedUntil = 0;
+let timerInterval = null;
+let wordTimeoutId = null;
+let adminUnlocked = false;
+let sheets = [];
+
+/* ==========================================================
+   ФОН
+   ========================================================== */
+let bgSparkEls = [];
+function createBgSparks() {
+  for (let i = 0; i < 45; i++) {
+    const el = document.createElement("div");
+    el.className = "bg-spark";
+    const size = 2 + Math.random() * 4;
+    el.style.width = size + "px";
+    el.style.height = size + "px";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.top = Math.random() * 100 + "vh";
+    el.style.animationDuration = (2 + Math.random() * 3) + "s";
+    el.style.animationDelay = (Math.random() * 3) + "s";
+    document.body.appendChild(el);
+    bgSparkEls.push(el);
+  }
+}
+function updateBgSparkColor(color) {
+  body.style.setProperty("--glow", color);
+  bgSparkEls.forEach(el => {
+    el.style.background = color;
+    el.style.boxShadow = `0 0 10px ${color}, 0 0 22px ${color}`;
+  });
+}
+function spawnFloaty() {
+  const symbols = ["💖", "🌸", "✨", "💕", "🩷", "⭐", "🌷", "💗", "🎀", "🍓"];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement("div");
+    el.className = "floaty";
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (12 + Math.random() * 18) + "px";
+    el.style.animationDuration = (12 + Math.random() * 14) + "s";
+    el.style.animationDelay = (Math.random() * 12) + "s";
+    document.body.appendChild(el);
+  }
+}
+
+/* ==========================================================
+   ИСКРЫ
+   ========================================================== */
+function spawnSparks(x, y, color) {
+  const colors = [color, "#ffffff", color, "#fff0f7", color];
+  for (let i = 0; i < 26; i++) {
+    const spark = document.createElement("div");
+    spark.className = "spark";
+    const size = 5 + Math.random() * 9;
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    spark.style.width = size + "px";
+    spark.style.height = size + "px";
+    spark.style.background = c;
+    spark.style.boxShadow = `0 0 10px ${c}, 0 0 22px ${c}`;
+    spark.style.left = x + "px";
+    spark.style.top = y + "px";
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 70 + Math.random() * 130;
+    spark.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+    spark.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+    spark.style.animation = `sparkFly ${1.4 + Math.random() * 0.8}s ease-out forwards`;
+    document.body.appendChild(spark);
+    setTimeout(() => spark.remove(), 2500);
+  }
+}
+function attachSparks(btn, color) {
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const rect = btn.getBoundingClientRect();
+    spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2, color || "#ff4f9a");
+    btn.style.filter = "blur(1.5px) brightness(1.2)";
+    setTimeout(() => { btn.style.filter = ""; }, 200);
+  });
+}
+
+/* ==========================================================
+   ПОСТРОЕНИЕ КНИГИ
+   ========================================================== */
+function buildBook() {
+  const cover = document.createElement("div");
+  cover.className = "sheet cover";
+  cover.style.background = coverStyle.coverBg;
+  cover.style.zIndex = 20;
+  cover.innerHTML = `
+    <div class="cover-inner">
+      <div class="cover-top">
+        <img class="cover-photo-square" src="${PHOTO_1}" alt="Вера">
+        <div class="cover-lines">
+          <div class="cover-line-name">Вера 💘</div>
+          <div class="cover-line">Маленькая книжка</div>
+          <div class="cover-line-italic">от Славы, с любовью</div>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <div class="cover-heart">💖</div>
+      <div class="cover-main-text">Приветик 💘<br>Эта маленькая книжка сделана специально для тебя 💌</div>
+    </div>
+    <div class="cover-hint">Нажми, чтобы открыть</div>
+  `;
+  cover.addEventListener("click", openBook);
+  bookEl.appendChild(cover);
+  sheets.push(cover);
+
+  bookPages.forEach((page, idx) => {
+    const sheet = document.createElement("div");
+    sheet.className = "sheet";
+    sheet.style.background = page.sheetBg;
+    sheet.style.setProperty("--sheet-glow", hexToRgba(page.color, 0.55));
+    sheet.style.zIndex = 20 - idx - 1;
+    sheet.innerHTML = renderPageHTML(page, idx + 1, bookPages.length);
+    bookEl.appendChild(sheet);
+    sheets.push(sheet);
+  });
+
+  const backCover = document.createElement("div");
+  backCover.className = "sheet back-cover";
+  backCover.style.zIndex = 4;
+  backCover.innerHTML = `
+    <div class="page-content">
+      <div class="emoji-gift">🎁</div>
+      <div class="big-text">А теперь главный подарок,<br>который я приготовил для тебя 💝</div>
+      <button class="gift-btn" id="giftBtn">Открыть подарок ✨</button>
+    </div>
+  `;
+  bookEl.appendChild(backCover);
+  sheets.push(backCover);
+
+  bookEl.querySelectorAll(".next-btn").forEach(btn => {
+    const pageIdx = parseInt(btn.dataset.page) - 1;
+    const color = bookPages[pageIdx].color;
+    const colorDark = bookPages[pageIdx].colorDark;
+    btn.style.setProperty("--btn-c1", color);
+    btn.style.setProperty("--btn-c2", colorDark);
+    btn.style.setProperty("--btn-glow", hexToRgba(color, 0.9));
+    attachSparks(btn, color);
+    btn.addEventListener("click", (e) => { e.stopPropagation(); turnNextPage(); });
+  });
+
+  setTimeout(() => {
+    const giftBtn = document.getElementById("giftBtn");
+    if (giftBtn) {
+      attachSparks(giftBtn, "#ff4f9a");
+      giftBtn.addEventListener("click", (e) => { e.stopPropagation(); startQuiz(); });
+    }
+  }, 50);
+}
+
+function renderPageHTML(page, num, total) {
+  const photoHTML = page.photo
+    ? `<img class="page-photo" src="${page.photo}" alt="Вера">`
+    : `<div class="page-emoji">${page.emoji || "✨"}</div>`;
+  return `
+    <div class="page-content">
+      <div class="q-progress" style="color:${page.colorDark};">Страница ${num} из ${total}</div>
+      ${photoHTML}
+      <h1 class="page-title" style="color:${page.colorDark};">${page.title}</h1>
+      <p class="page-text" style="color:${page.colorDark};">${page.text}</p>
+      <button class="next-btn" data-page="${num}">Дальше →</button>
+    </div>
+  `;
+}
+function hexToRgba(hex, a) {
+  try {
+    let c = hex.replace("#", "");
+    if (c.length === 3) c = c.split("").map(x => x + x).join("");
+    return `rgba(${parseInt(c.substr(0,2),16)},${parseInt(c.substr(2,2),16)},${parseInt(c.substr(4,2),16)},${a})`;
+  } catch (e) { return `rgba(255,79,154,${a})`; }
+}
+
+/* ==========================================================
+   КНИГА
+   ========================================================== */
+function openBook() {
+  if (sheetIndex >= 0) return;
+  sheetIndex = 0;
+  applyBookState();
+  addLog("page", "Открыл книгу", "Вера открыла книгу");
+  saveState();
+}
+
+function applyBookState() {
+  for (let i = 0; i < sheets.length; i++) {
+    const s = sheets[i];
+    if (i <= sheetIndex) s.classList.add("flipped");
+    else s.classList.remove("flipped");
+  }
+  if (sheetIndex === -1) {
+    body.style.background = coverStyle.pageBg;
+    updateBgSparkColor(coverStyle.color);
+    const hint = sheets[0].querySelector(".cover-hint");
+    if (hint) hint.style.display = "block";
+  } else if (sheetIndex <= 4) {
+    const page = bookPages[sheetIndex];
+    body.style.background = page.pageBg;
+    updateBgSparkColor(page.color);
+    const hint = sheets[0].querySelector(".cover-hint");
+    if (hint) hint.style.display = "none";
+  } else if (sheetIndex === 5) {
+    body.style.background = "linear-gradient(135deg, #ffe4f0 0%, #ffd1e6 50%, #ffb8d9 100%)";
+    updateBgSparkColor("#ff4f9a");
+  }
+  sheets.forEach((s, i) => {
+    if (i === sheetIndex + 1) s.style.zIndex = 30;
+    else if (i <= sheetIndex) s.style.zIndex = 20 - i;
+    else s.style.zIndex = 20 - i;
+  });
+  updateAdminLinkVisibility();
+}
+
+function turnNextPage() {
+  if (sheetIndex >= 5) return;
+  sheetIndex++;
+  applyBookState();
+  if (sheetIndex <= 4) addLog("page", "Перелистнул страницу", `Открыта страница №${sheetIndex + 1}`);
+  else if (sheetIndex === 5) { addLog("page", "Книга закрыта", "Вера дошла до задней обложки"); startBackCoverWords(); }
+  saveState();
+}
+
+/* ==========================================================
+   ЛЕТЯЩИЕ СЛОВА
+   ========================================================== */
+function launchFlyingWord() {
+  const word = FLYING_WORDS[Math.floor(Math.random() * FLYING_WORDS.length)];
+  const el = document.createElement("div");
+  el.className = "flying-word";
+  el.textContent = word;
+  const colors = ["#ff4f9a", "#ff7eb3", "#c22069", "#a855c9", "#ff5fa2", "#e84a8a"];
+  el.style.color = colors[Math.floor(Math.random() * colors.length)];
+  el.style.left = (5 + Math.random() * 65) + "vw";
+  el.style.top = "-80px";
+  el.style.fontSize = (20 + Math.random() * 16) + "px";
+  el.style.setProperty("--rot", (Math.random() * 20 - 10) + "deg");
+  const duration = 6 + Math.random() * 2;
+  el.style.animationDuration = duration + "s";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), duration * 1000 + 400);
+}
+function startBackCoverWords() {
+  stopFlyingWords();
+  scheduleNextWord(true);
+}
+function scheduleNextWord(immediate) {
+  if (!immediate) {
+    wordTimeoutId = setTimeout(() => {
+      launchFlyingWord();
+      scheduleNextWord(false);
+    }, 1500);
+  } else {
+    launchFlyingWord();
+    scheduleNextWord(false);
+  }
+}
+function stopFlyingWords() {
+  if (wordTimeoutId) { clearTimeout(wordTimeoutId); wordTimeoutId = null; }
+  document.querySelectorAll(".flying-word").forEach(el => el.remove());
+}
+
+/* ==========================================================
+   ВОПРОСЫ
+   ========================================================== */
+function startQuiz() {
+  addLog("page", "Начало вопросов", "Вера открыла подарок и начала вопросы");
+  currentQuestion = 0;
+  attemptsLeft = MAX_ATTEMPTS;
+  lockedUntil = 0;
+  overlay = "quiz";
+  stopFlyingWords();
+  askBeforeQuestion();
+  saveState();
+}
+
+/* ---------- Подтверждение перед вопросом ---------- */
+function askBeforeQuestion() {
+  removeOverlay();
+
+  // Сначала проверяем КД
+  const persistedCd = loadPersistedCooldown();
+  if (persistedCd > Date.now()) {
+    lockedUntil = persistedCd;
+    showCooldownOverlay();
+    return;
+  }
+  if (currentQuestion >= questions.length) {
+    showRewardOverlay();
+    return;
+  }
+
+  const style = questionStyles[currentQuestion % questionStyles.length];
+  body.style.background = style.pageBg;
+  updateBgSparkColor(style.color);
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.style.setProperty("--modal-glow", hexToRgba(style.color, 0.7));
+  ov.innerHTML = `
+    <div class="modal" style="background:${style.sheetBg};">
+      <div class="modal-emoji">💌</div>
+      <div class="modal-text" style="color:${style.colorDark};">Готова ответить на вопрос №${currentQuestion + 1}?</div>
+      <div class="modal-btns" style="flex-direction:column;">
+        <button class="btn btn-full" id="qReady" style="background:linear-gradient(135deg, ${style.color}, ${style.colorDark}); box-shadow: 0 0 22px ${hexToRgba(style.color,0.9)}, 0 0 50px ${hexToRgba(style.color,0.55)}, inset 0 0 15px rgba(255,255,255,0.4);">Да, я готова 💕</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const readyBtn = document.getElementById("qReady");
+  attachSparks(readyBtn, style.color);
+  readyBtn.onclick = () => renderQuizOverlay();
+}
+
+function renderQuizOverlay() {
+  removeOverlay();
+  if (currentQuestion >= questions.length) { showRewardOverlay(); return; }
+  if (lockedUntil > Date.now()) { showCooldownOverlay(); return; }
+
+  const style = questionStyles[currentQuestion % questionStyles.length];
+  body.style.background = style.pageBg;
+  updateBgSparkColor(style.color);
+  overlay = "quiz";
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.style.setProperty("--modal-glow", hexToRgba(style.color, 0.7));
+  ov.innerHTML = `
+    <div class="modal" style="background:${style.sheetBg};">
+      <div class="q-progress-top" style="color:${style.colorDark};">Вопрос ${currentQuestion + 1} из ${questions.length}</div>
+      <div class="q-title" style="color:${style.colorDark}; margin-top:20px;">${questions[currentQuestion].q}</div>
+      <div class="q-btns">
+        <button class="q-btn" id="qYes">Да</button>
+        <button class="q-btn" id="qNo">Нет</button>
+      </div>
+      <div class="q-feedback" id="qFb"></div>
+      <div class="q-attempts" id="qAtt">Попыток осталось: ${attemptsLeft}</div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const yesBtn = document.getElementById("qYes");
+  const noBtn = document.getElementById("qNo");
+  const glow = hexToRgba(style.color, 0.9);
+  yesBtn.style.background = `linear-gradient(135deg, ${style.color}, ${style.colorDark})`;
+  yesBtn.style.boxShadow = `0 0 22px ${glow}, 0 0 50px ${hexToRgba(style.color, 0.55)}, inset 0 0 15px rgba(255,255,255,0.4)`;
+  noBtn.style.background = "linear-gradient(135deg, #c9a0dc, #a875c9)";
+  noBtn.style.boxShadow = "0 0 22px rgba(168,117,201,0.85), 0 0 50px rgba(168,117,201,0.55), inset 0 0 15px rgba(255,255,255,0.4)";
+
+  attachSparks(yesBtn, style.color);
+  attachSparks(noBtn, "#a875c9");
+
+  yesBtn.onclick = () => answerQuestion(0);
+  noBtn.onclick = () => answerQuestion(1);
+}
+
+function answerQuestion(chosen) {
+  const q = questions[currentQuestion];
+  const fb = document.getElementById("qFb");
+  const att = document.getElementById("qAtt");
+  const yesBtn = document.getElementById("qYes");
+  const noBtn = document.getElementById("qNo");
+  const chosenText = chosen === 0 ? "Да" : "Нет";
+  const correctText = q.correct === 0 ? "Да" : "Нет";
+
+  if (chosen === q.correct) {
+    fb.textContent = "Правильно! 💗 Молодец!";
+    fb.className = "q-feedback q-ok";
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+    addLog("answer", `Вопрос ${currentQuestion + 1}`, `Ответ: "${chosenText}" — верно ✅`);
+
+    setTimeout(() => {
+      currentQuestion++;
+      if (currentQuestion >= questions.length) {
+        showRewardOverlay();
+      } else {
+        askBeforeQuestion();
+      }
+      saveState();
+    }, 950);
+  } else {
+    attemptsLeft--;
+    addLog("error", `Вопрос ${currentQuestion + 1}`, `Ответ: "${chosenText}" — неверно (правильный: "${correctText}"). Осталось: ${attemptsLeft}`);
+
+    if (attemptsLeft > 0) {
+      fb.textContent = `Ой, не то! Осталось попыток: ${attemptsLeft}`;
+      fb.className = "q-feedback q-bad";
+      att.textContent = `Попыток осталось: ${attemptsLeft}`;
+    } else {
+      fb.textContent = "Попытки закончились 😢";
+      fb.className = "q-feedback q-bad";
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      lockedUntil = Date.now() + COOLDOWN_SEC * 1000;
+      addLog("cooldown", "Блокировка", "Все попытки использованы — КД 120 секунд");
+      setTimeout(showCooldownOverlay, 1200);
+    }
+    saveState();
+  }
+}
+
+/* ==========================================================
+   КД + экран выбора после КД
+   ========================================================== */
+function showCooldownOverlay() {
+  removeOverlay();
+  overlay = "cooldown";
+
+  const persistedCd = loadPersistedCooldown();
+  if (persistedCd > lockedUntil) lockedUntil = persistedCd;
+
+  body.style.background = "linear-gradient(135deg, #ff7eb3 0%, #ffd6e8 50%, #ffb8d9 100%)";
+  updateBgSparkColor("#ff4f9a");
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.innerHTML = `
+    <div class="modal" style="background:linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%);">
+      <div class="modal-emoji">⏳</div>
+      <div class="modal-text">Ты использовала все попытки.<br>Начнём заново совсем скоро!</div>
+      <div class="timer" id="cdTimer" style="color:#ff4f9a;">02:00</div>
+      <div class="q-attempts">Смотри, какие слова летят для тебя ✨</div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  startBackCoverWords();
+
+  const updateTimer = () => {
+    const left = Math.max(0, Math.ceil((lockedUntil - Date.now()) / 1000));
+    const m = String(Math.floor(left / 60)).padStart(2, "0");
+    const s = String(left % 60).padStart(2, "0");
+    const t = document.getElementById("cdTimer");
+    if (t) t.textContent = `${m}:${s}`;
+
+    if (left <= 0) {
+      clearInterval(timerInterval);
+      stopFlyingWords();
+      try { localStorage.removeItem(COOLDOWN_KEY); } catch (e) {}
+      lockedUntil = 0;
+      addLog("page", "КД закончился", "Вера выбирает: продолжить или начать заново");
+      showAfterCooldownChoice();
+    }
+  };
+
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 1000);
+  saveState();
+}
+
+/* ---------- Экран выбора после КД ---------- */
+function showAfterCooldownChoice() {
+  removeOverlay();
+  overlay = "choice";
+  saveState();
+
+  body.style.background = "linear-gradient(135deg, #ffb0d1 0%, #ffd6e8 50%, #ff9ec7 100%)";
+  updateBgSparkColor("#ff4f9a");
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.style.setProperty("--modal-glow", "rgba(255,79,154,0.7)");
+  ov.innerHTML = `
+    <div class="modal" style="background:linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%);">
+      <div class="modal-emoji">🌸</div>
+      <div class="modal-text" style="color:#8a1f52;">Отдохнула? Что хочешь сделать дальше?</div>
+      <div class="modal-btns" style="flex-direction:column; gap:10px;">
+        <button class="btn btn-full" id="continueBtn">Продолжить вопросы 💕</button>
+        <button class="btn btn-no btn-full" id="restartBtn">Вернуться в начало 🌷</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  attachSparks(continueBtn, "#ff4f9a");
+  attachSparks(restartBtn, "#a875c9");
+
+  continueBtn.onclick = () => {
+    // Сбрасываем попытки и продолжаем с текущего вопроса
+    attemptsLeft = MAX_ATTEMPTS;
+    currentQuestion = 0;   // вопросы начинаются с начала
+    overlay = "quiz";
+    addLog("page", "Продолжила вопросы", "Вера решила продолжить вопросы заново");
+    askBeforeQuestion();
+    saveState();
+  };
+
+  restartBtn.onclick = () => {
+    // Полный сброс → возврат в самое начало сайта (обложка)
+    addLog("page", "Вернулась в начало", "Вера вернулась к обложке книги");
+    clearState();
+    resetToBeginning();
+  };
+}
+
+/* ---------- Возврат в самое начало сайта ---------- */
+function resetToBeginning() {
+  removeOverlay();
+  stopFlyingWords();
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+
+  // Сброс состояния
+  sheetIndex = -1;
+  overlay = "none";
+  currentQuestion = 0;
+  attemptsLeft = MAX_ATTEMPTS;
+  lockedUntil = 0;
+
+  // Применяем визуально без анимации
+  sheets.forEach(s => { s.style.transition = "none"; });
+  applyBookState();
+  setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+
+  // Показываем подсказку «Нажми, чтобы открыть» обратно
+  const hint = sheets[0].querySelector(".cover-hint");
+  if (hint) hint.style.display = "block";
+
+  clearState();
+  saveState();
+}
+
+/* ==========================================================
+   НАГРАДА
+   ========================================================== */
+function showRewardOverlay() {
+  removeOverlay();
+  overlay = "reward";
+  body.style.background = "linear-gradient(135deg, #ff4f9a 0%, #ffc2dd 50%, #ff7eb3 100%)";
+  updateBgSparkColor("#ff4f9a");
+
+  addLog("reward", "Награда", "Вера дошла до финала и получила награду");
+  startBackCoverWords();
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.innerHTML = `
+    <div class="final-card">
+      <div class="final-header">
+        <img class="final-photo" src="${PHOTO_1}" alt="Вера">
+        <div class="final-info">
+          <div class="final-name">Поздравляю, Вера! 💖</div>
+          <div class="final-line">Ты прошла все вопросы!</div>
+          <div class="final-line">Вот твоя награда:</div>
+        </div>
+      </div>
+      <div class="final-reward" id="rewardWord">${REWARD_WORD}</div>
+      <button class="final-btn" id="claimBtn">Забрать 🎁</button>
+      <div class="final-copied" id="copiedMsg"></div>
+      <div class="final-signature">Сделано с любовью для тебя 💌<br>— Слава</div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const claimBtn = document.getElementById("claimBtn");
+  attachSparks(claimBtn, "#ff4f9a");
+
+  claimBtn.onclick = () => {
+    const text = REWARD_WORD;
+    const msg = document.getElementById("copiedMsg");
+    addLog("reward", "Забрала награду", "Нажала 'Забрать' — награда скопирована и открыт Telegram");
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => fallbackCopy(text, msg));
+    } else {
+      fallbackCopy(text, msg);
+    }
+    msg.textContent = "Награда скопирована! Открываю Telegram 💌";
+
+    const wordEl = document.getElementById("rewardWord");
+    const range = document.createRange();
+    range.selectNodeContents(wordEl);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    setTimeout(() => {
+      const tgUrl = "https://t.me/share/url?url=" + encodeURIComponent("Подарок от Славы 💖") + "&text=" + encodeURIComponent(text);
+      window.open(tgUrl, "_blank");
+    }, 700);
+  };
+
+  saveState();
+}
+
+function fallbackCopy(text, msgEl) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    if (msgEl) msgEl.textContent = "Награда скопирована! 💗";
+  } catch (e) {
+    if (msgEl) msgEl.textContent = "Выдели слово и скопируй вручную 💕";
+  }
+  document.body.removeChild(ta);
+}
+
+function removeOverlay() {
+  const old = document.getElementById("quizOverlay");
+  if (old) old.remove();
+}
+
+/* ==========================================================
+   АДМИН
+   ========================================================== */
+function updateAdminLinkVisibility() {
+  if (sheetIndex === 0 && overlay === "none") adminLink.style.display = "block";
+  else adminLink.style.display = "none";
+}
+
+adminLink.addEventListener("click", () => openAdminPanel());
+
+function openAdminPanel() {
+  const overlayEl = document.createElement("div");
+  overlayEl.className = "admin-overlay";
+  overlayEl.id = "adminOverlay";
+
+  if (!adminUnlocked) {
+    overlayEl.innerHTML = `
+      <div class="admin-panel">
+        <div class="admin-header">
+          <h2>🔒 Секретик</h2>
+          <button class="admin-close" id="adminClose">✕</button>
+        </div>
+        <div class="admin-body">
+          <input type="password" class="admin-login-input" id="adminPass" placeholder="•••••" autocomplete="off">
+          <div class="admin-login-error" id="adminErr"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlayEl);
+
+    const passInput = overlayEl.querySelector("#adminPass");
+    const errEl = overlayEl.querySelector("#adminErr");
+
+    const tryLogin = () => {
+      if (passInput.value === ADMIN_PASSWORD) {
+        adminUnlocked = true;
+        addLog("visit", "Вход в админку", "Слава вошёл в админ-панель");
+        overlayEl.remove();
+        openAdminPanel();
+      } else {
+        const funny = ["Ой, не тот секретик 🙈", "Хи-хи, не угадала 💕", "Тут только для Славы ✨", "Милый, но неверный пароль 🌸", "Почти-почти, но нет 🩷"];
+        errEl.textContent = funny[Math.floor(Math.random() * funny.length)];
+        passInput.value = "";
+        passInput.focus();
+      }
+    };
+    passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
+    overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+    setTimeout(() => passInput.focus(), 100);
+  } else {
+    renderAdminLogs(overlayEl);
+    document.body.appendChild(overlayEl);
+    overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+  }
+}
+
+function renderAdminLogs(overlayEl) {
+  const logs = loadLogs().slice().reverse();
+  const info = {
+    ua: navigator.userAgent, lang: navigator.language,
+    screen: `${screen.width}x${screen.height}`,
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
+  const visits = logs.filter(l => l.type === "visit").length;
+  const answers = logs.filter(l => l.type === "answer").length;
+  const errors = logs.filter(l => l.type === "error").length;
+  const rewards = logs.filter(l => l.type === "reward" && l.event === "Награда").length;
+  const uniqueVisitors = new Set(logs.map(l => l.visitor)).size;
+
+  const logItemsHTML = logs.length === 0
+    ? `<div class="log-empty">Пока нет записей</div>`
+    : logs.map(log => {
+        const d = new Date(log.time);
+        const dateStr = d.toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        return `
+          <div class="log-item log-type-${log.type}">
+            <div class="log-time">${dateStr} · ${log.visitor.slice(-6)}</div>
+            <div class="log-event">${escapeHtml(log.event)}</div>
+            <div class="log-detail">${escapeHtml(log.detail)}</div>
+          </div>
+        `;
+      }).join("");
+
+  overlayEl.innerHTML = `
+    <div class="admin-panel">
+      <div class="admin-header">
+        <h2>👑 Админ-панель</h2>
+        <button class="admin-close" id="adminClose">✕</button>
+      </div>
+      <div class="admin-body">
+        <div class="admin-stats">
+          <div class="stat-card"><div class="stat-value">${logs.length}</div><div class="stat-label">Событий</div></div>
+          <div class="stat-card"><div class="stat-value">${uniqueVisitors}</div><div class="stat-label">Посетителей</div></div>
+          <div class="stat-card"><div class="stat-value">${answers}</div><div class="stat-label">Верных</div></div>
+          <div class="stat-card"><div class="stat-value">${errors}</div><div class="stat-label">Ошибок</div></div>
+          <div class="stat-card"><div class="stat-value">${rewards}</div><div class="stat-label">Финал</div></div>
+          <div class="stat-card"><div class="stat-value">${visits}</div><div class="stat-label">Входов</div></div>
+        </div>
+        <div class="admin-actions">
+          <button class="admin-action-btn" id="refreshLogs">🔄 Обновить</button>
+          <button class="admin-action-btn" id="copyLogs">📋 Скопировать</button>
+          <button class="admin-action-btn danger" id="clearLogs">🗑 Очистить</button>
+          <button class="admin-action-btn danger" id="resetProgress">↩ Сбросить прогресс</button>
+        </div>
+        <div class="log-list">${logItemsHTML}</div>
+        <p style="text-align:center; font-size:0.75rem; color:#8a3a60; margin-top:16px; line-height:1.5;">
+          Браузер: ${escapeHtml(info.ua.slice(0, 50))}...<br>
+          ${escapeHtml(info.lang)} · ${escapeHtml(info.screen)} · ${escapeHtml(info.tz)}
+        </p>
+      </div>
+    </div>
+  `;
+
+  overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+  overlayEl.querySelector("#refreshLogs").onclick = () => { overlayEl.remove(); openAdminPanel(); };
+  overlayEl.querySelector("#copyLogs").onclick = () => {
+    const text = logs.map(l => {
+      const d = new Date(l.time).toLocaleString("ru-RU");
+      return `[${d}] ${l.visitor.slice(-6)} | ${l.event} | ${l.detail}`;
+    }).join("\n");
+    if (navigator.clipboard) navigator.clipboard.writeText(text);
+    alert("Логи скопированы");
+  };
+  overlayEl.querySelector("#clearLogs").onclick = () => {
+    if (confirm("Удалить все логи?")) { saveLogs([]); overlayEl.remove(); openAdminPanel(); }
+  };
+  overlayEl.querySelector("#resetProgress").onclick = () => {
+    if (confirm("Сбросить прогресс Веры?")) { clearState(); location.reload(); }
+  };
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* ==========================================================
+   ВОССТАНОВЛЕНИЕ
+   ========================================================== */
+function restoreState() {
+  const saved = loadState();
+  const persistedCd = loadPersistedCooldown();
+
+  // КД ещё идёт — показываем
+  if (persistedCd > Date.now()) {
+    lockedUntil = persistedCd;
+    sheetIndex = saved && saved.sheetIndex != null ? saved.sheetIndex : 5;
+    overlay = "cooldown";
+    sheets.forEach(s => { s.style.transition = "none"; });
+    applyBookState();
+    setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+    setTimeout(() => showCooldownOverlay(), 200);
+    return;
+  }
+
+  if (!saved) { applyBookState(); return; }
+
+  sheetIndex = saved.sheetIndex != null ? saved.sheetIndex : -1;
+  currentQuestion = saved.currentQuestion || 0;
+  attemptsLeft = saved.attemptsLeft != null ? saved.attemptsLeft : MAX_ATTEMPTS;
+  lockedUntil = 0;
+  overlay = saved.overlay || "none";
+
+  // Если был КД, но он истёк — показываем экран выбора
+  if (overlay === "cooldown") {
+    sheets.forEach(s => { s.style.transition = "none"; });
+    applyBookState();
+    setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+    setTimeout(() => showAfterCooldownChoice(), 200);
+    return;
+  }
+
+  sheets.forEach(s => { s.style.transition = "none"; });
+  applyBookState();
+  setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+
+  setTimeout(() => {
+    if (overlay === "quiz") {
+      askBeforeQuestion();
+    } else if (overlay === "choice") {
+      showAfterCooldownChoice();
+    } else if (overlay === "cooldown") {
+      showCooldownOverlay();
+    } else if (overlay === "reward") {
+      showRewardOverlay();
+    } else if (sheetIndex === 5) {
+      startBackCoverWords();
+    }
+  }, 200);
+}
+
+/* ==========================================================
+   СТАРТ
+   ========================================================== */
+createBgSparks();
+spawnFloaty();
+buildBook();
+
+if (!sessionStorage.getItem("vera_session_logged")) {
+  sessionStorage.setItem("vera_session_logged", "1");
+  addLog("visit", "Заход на сайт", `Браузер: ${navigator.userAgent.includes("Mobile") ? "мобильный" : "десктоп"}`);
+}
+
+restoreState();
+</script>
+</body>
+  </html>
